@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>المصحف الإلكتروني - سور من القرآن الكريم</title>
+    <style>
+        :root {
+            --primary-color: #1a365d;
+            --accent-color: #2f855a;
+            --accent-hover: #22543d;
+            --bg-color: #f7fafc;
+            --card-bg: #ffffff;
+            --text-color: #2d3748;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        header p {
+            margin: 0;
+            color: #718096;
+            font-size: 14px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 600px;
+        }
+
+        .tab-btn {
+            background-color: #e2e8f0;
+            border: none;
+            padding: 10px 20px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .page-content {
+            display: none;
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        .quran-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 20px;
+        }
+
+        .audio-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .time-display {
+            font-size: 15px;
+            font-weight: bold;
+            color: #4a5568;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .buttons-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .control-btn {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e0;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex: 1;
+            color: #4a5568;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+
+        .control-btn:hover {
+            background-color: #edf2f7;
+            color: #2d3748;
+            border-color: #a0aec0;
+        }
+
+        .control-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .play-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            font-weight: bold;
+            flex: 1.4;
+            font-size: 15px;
+            padding: 12px 20px;
+            box-shadow: 0 2px 4px rgba(47, 133, 90, 0.2);
+        }
+
+        .play-btn:hover {
+            background-color: var(--accent-hover);
+            color: white;
+        }
+
+        .play-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>المصحف الإلكتروني المرتل</h1>
+        <p>اختر السورة للاستماع والقراءة</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchPage(582)">النبأ ١</button>
+        <button class="tab-btn" onclick="switchPage(583)">النبأ ٢</button>
+        <button class="tab-btn" onclick="switchPage(584)">النازعات ٢</button>
+        <button class="tab-btn" onclick="switchPage(585)">عـبـس</button>
+        <button class="tab-btn" onclick="switchPage(586)">التكوير</button>
+    </div>
+
+    <div id="page-container"></div>
+
+    <script>
+        // هنا تم تغيير صيغة ملفات الصوت تلقائياً لتطابق امتداد .m4a المرفوع في مستودعك
+        const quranData = [
+            { id: 582, img: "582.png", audio: "582.m4a", label: "النبأ ١" },
+            { id: 583, img: "583.png", audio: "583.m4a", label: "النبأ ٢" },
+            { id: 584, img: "584.png", audio: "584.m4a", label: "النازعات ٢" },
+            { id: 585, img: "585.png", audio: "585.m4a", label: "عـبـس" },
+            { id: 586, img: "586.png", audio: "586.m4a", label: "التكوير" }
+        ];
+
+        const container = document.getElementById('page-container');
+
+        quranData.forEach((page, index) => {
+            const isActive = index === 0 ? 'active' : '';
+            const pageHtml = `
+                <div id="page-${page.id}" class="page-content ${isActive}">
+                    <img src="${page.img}" alt="${page.label}" class="quran-img">
+                    
+                    <audio id="audio-player-${page.id}" src="${page.audio}" preload="metadata"></audio>
+                    
+                    <div class="audio-controls">
+                        <div class="time-display" id="time-${page.id}">0:00 / 0:00</div>
+                        <div class="buttons-group">
+                            <button class="control-btn" onclick="seekForward(${page.id})">
+                                <span>تقديم 5ث</span>
+                                <svg viewBox="0 0 24 24"><path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/></svg>
+                            </button>
+                            
+                            <button class="control-btn play-btn" id="play-btn-${page.id}" onclick="togglePlay(${page.id})">
+                                <svg id="play-icon-${page.id}" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                                <span id="play-text-${page.id}">تشغيل</span>
+                            </button>
+                            
+                            <button class="control-btn" onclick="seekBackward(${page.id})">
+                                <svg viewBox="0 0 24 24"><path d="M11 18V6l-8.5 6 8.5 6zm.5-6l8.5 6V6l-8.5 6z"/></svg>
+                                <span>تأخير 5ث</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            container.innerHTML += pageHtml;
+        });
+
+        window.onload = () => {
+            quranData.forEach(page => {
+                const audio = document.getElementById(`audio-player-${page.id}`);
+                const timeDisplay = document.getElementById(`time-${page.id}`);
+                
+                if(audio && timeDisplay) {
+                    audio.ontimeupdate = () => {
+                        timeDisplay.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration || 0)}`;
+                    };
+                    audio.onloadedmetadata = () => {
+                        timeDisplay.innerText = `0:00 / ${formatTime(audio.duration)}`;
+                    };
+                    audio.onended = () => {
+                        resetPlayButton(page.id);
+                    };
+                }
+            });
+        };
+
+        function switchPage(pageId) {
+            quranData.forEach(page => {
+                const audio = document.getElementById(`audio-player-${page.id}`);
+                if (audio) {
+                    audio.pause();
+                    resetPlayButton(page.id);
+                }
+            });
+
+            document.querySelectorAll('.tab-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', quranData[index].id === pageId);
+            });
+
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            document.getElementById(`page-${pageId}`).classList.add('active');
+        }
+
+        function togglePlay(pageId) {
+            const audio = document.getElementById(`audio-player-${pageId}`);
+            const textSpan = document.getElementById(`play-text-${pageId}`);
+            const iconSvg = document.getElementById(`play-icon-${pageId}`);
+
+            if (audio.paused) {
+                audio.play();
+                textSpan.innerText = "إيقاف مؤقت";
+                iconSvg.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>';
+            } else {
+                audio.pause();
+                textSpan.innerText = "تشغيل";
+                iconSvg.innerHTML = '<path d="M8 5v14l11-7z"/>';
+            }
+        }
+
+        function resetPlayButton(pageId) {
+            document.getElementById(`play-text-${pageId}`).innerText = "تشغيل";
+            document.getElementById(`play-icon-${pageId}`).innerHTML = '<path d="M8 5v14l11-7z"/>';
+        }
+
+        function seekForward(pageId) {
+            const audio = document.getElementById(`audio-player-${pageId}`);
+            audio.currentTime = Math.min(audio.duration, audio.currentTime + 5);
+        }
+
+        function seekBackward(pageId) {
+            const audio = document.getElementById(`audio-player-${pageId}`);
+            audio.currentTime = Math.max(0, audio.currentTime - 5);
+        }
+
+        function formatTime(time) {
+            const mins = Math.floor(time / 60);
+            const secs = Math.floor(time % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+    </script>
+</body>
+</html>
