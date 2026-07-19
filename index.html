@@ -52,7 +52,7 @@
         <h2>سورة النبأ - الجزء الأول</h2>
         <img src="IMG_2013.PNG" alt="سورة النبأ 1">
         <audio controls>
-            <source src="النبأ ١ (1).m4a" type="audio/mp4">
+            <source src="naba1.m4a" type="audio/mp4">
         </audio>
     </div>
 
@@ -61,7 +61,7 @@
         <h2>سورة النبأ - الجزء الثاني</h2>
         <img src="IMG_2048.PNG" alt="سورة النبأ 2">
         <audio controls>
-            <source src="النبأ ٢ (1).m4a" type="audio/mp4">
+            <source src="naba2.m4a" type="audio/mp4">
         </audio>
     </div>
 
@@ -70,7 +70,7 @@
         <h2>سورة النازعات</h2>
         <img src="IMG_2049.PNG" alt="سورة النازعات">
         <audio controls>
-            <source src="النازعات ٢ (1).m4a" type="audio/mp4">
+            <source src="nazeat.m4a" type="audio/mp4">
         </audio>
     </div>
 
@@ -79,7 +79,7 @@
         <h2>سورة عبس</h2>
         <img src="IMG_2051.PNG" alt="سورة عبس">
         <audio controls>
-            <source src="عبس (1).m4a" type="audio/mp4">
+            <source src="abas.m4a" type="audio/mp4">
         </audio>
     </div>
 
@@ -88,196 +88,11 @@
         <h2>سورة التكوير</h2>
         <img src="IMG_2062.PNG" alt="سورة التكوير">
         <audio controls>
-            <source src="التكوير (1).m4a" type="audio/mp4">
+            <source src="takweer.m4a" type="audio/mp4">
         </audio>
     </div>
 
 </div>
 
-</body>
-</html><!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تطبيق المصحف المرتل</title>
-    <!-- استدعاء مكتبة الأيقونات الاحترافية -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #f7f9fa; color: #333; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        
-        /* زر الفهرس الثابت في الزاوية */
-        .index-btn { position: fixed; top: 20px; right: 20px; background-color: #2c3e50; color: white; border: none; padding: 12px 18px; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; z-index: 100; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .index-btn:hover { background-color: #34495e; }
-
-        /* القائمة الجانبية (الفهرس) */
-        .sidebar { position: fixed; top: 0; right: -300px; width: 300px; height: 100%; background-color: white; box-shadow: -4px 0 10px rgba(0,0,0,0.1); z-index: 99; transition: 0.3s; padding: 80px 20px 20px; overflow-y: auto; }
-        .sidebar.open { right: 0; }
-        .sidebar h3 { margin-bottom: 20px; border-bottom: 2px solid #eee; padding-bottom: 10px; color: #2c3e50; }
-        .sidebar-item { display: flex; justify-content: space-between; padding: 12px; border-bottom: 1px solid #f0f0f0; cursor: pointer; border-radius: 6px; transition: 0.2s; }
-        .sidebar-item:hover { background-color: #f5f6fa; color: #2980b9; }
-
-        /* حاوية المصحف والتقليب */
-        .quran-container { display: flex; align-items: center; justify-content: center; width: 100%; max-width: 600px; margin-top: 80px; padding: 10px; position: relative; }
-        .page-img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); background-color: white; }
-        .nav-btn { background-color: rgba(44, 62, 80, 0.7); color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; font-size: 18px; position: absolute; top: 50%; transform: translateY(-50%); transition: 0.3s; z-index: 10; display: flex; align-items: center; justify-content: center; }
-        .nav-btn:hover { background-color: rgba(44, 62, 80, 0.9); }
-        .prev-btn { right: -20px; }
-        .next-btn { left: -20px; }
-
-        /* شريط التحكم بالصوت */
-        .audio-controls { margin-top: 25px; background: white; padding: 15px 25px; border-radius: 50px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; width: 90%; max-width: 500px; gap: 20px; }
-        .control-btn { background: none; border: none; font-size: 22px; cursor: pointer; color: #2c3e50; transition: 0.2s; display: flex; align-items: center; justify-content: center; position: relative; }
-        .control-btn:hover { color: #2980b9; transform: scale(1.1); }
-        .play-btn { font-size: 30px; color: #27ae60; }
-        .play-btn:hover { color: #2ecc71; }
-        
-        /* أرقام الـ 15 ثانية الصغيرة داخل الأزرار */
-        .skip-text { font-size: 11px; font-weight: bold; position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%); color: #2c3e50; }
-        .control-btn:hover .skip-text { color: #2980b9; }
-
-        .progress-container { flex-grow: 1; display: flex; align-items: center; }
-        .progress-bar { width: 100%; accent-color: #2c3e50; cursor: pointer; }
-        
-        @media (max-width: 650px) {
-            .quran-container { max-width: 90%; }
-            .nav-btn { width: 35px; height: 35px; font-size: 14px; }
-            .prev-btn { right: -10px; }
-            .next-btn { left: -10px; }
-        }
-    </style>
-</head>
-<body>
-
-    <!-- زر الفهرس بالأيقونة الجديدة -->
-    <button class="index-btn" onclick="toggleSidebar()"><i class="fa-solid fa-bars-staggered"></i> الفهرس</button>
-
-    <!-- القائمة الجانبية (الفهرس) -->
-    <div class="sidebar" id="sidebar">
-        <h3>فهرس السور</h3>
-        <div class="sidebar-item" onclick="jumpToPage(0)"><span>سورة النبأ (٥٨٢)</span> <i class="fa-solid fa-volume-high" style="color: #27ae60;"></i></div>
-        <div class="sidebar-item" onclick="jumpToPage(1)"><span>سورة النبأ ٢ (٥٨٣)</span> <i class="fa-solid fa-volume-high" style="color: #27ae60;"></i></div>
-        <div class="sidebar-item" onclick="jumpToPage(2)"><span>سورة النازعات (٥٨٤)</span> <i class="fa-solid fa-volume-high" style="color: #27ae60;"></i></div>
-        <div class="sidebar-item" onclick="jumpToPage(3)"><span>سورة عبس (٥٨٥)</span> <i class="fa-solid fa-volume-high" style="color: #27ae60;"></i></div>
-        <div class="sidebar-item" onclick="jumpToPage(4)"><span>سورة التكوير (٥٨٦)</span> <i class="fa-solid fa-volume-high" style="color: #27ae60;"></i></div>
-    </div>
-
-    <!-- حاوية عرض الصفحات وأزرار الأسهم المحترفة -->
-    <div class="quran-container">
-        <button class="nav-btn prev-btn" onclick="prevPage()"><i class="fa-solid fa-chevron-right"></i></button>
-        <img src="images/582.png" id="quran-page" class="page-img" alt="صفحة المصحف">
-        <button class="nav-btn next-btn" onclick="nextPage()"><i class="fa-solid fa-chevron-left"></i></button>
-    </div>
-
-    <!-- مشغل الصوت بالأيقونات الرسمية للتقديم والترجيع -->
-    <div class="audio-controls">
-        <!-- زر ترجيع 15 ثانية -->
-        <button class="control-btn" onclick="skip(-15)">
-            <i class="fa-solid fa-arrow-rotate-left"></i>
-            <span class="skip-text">15</span>
-        </button>
-        
-        <!-- زر التشغيل والإيقاف -->
-        <button class="control-btn play-btn" id="play-btn" onclick="togglePlay()">
-            <i class="fa-solid fa-circle-play" id="play-icon"></i>
-        </button>
-        
-        <!-- زر تقديم 15 ثانية -->
-        <button class="control-btn" onclick="skip(15)">
-            <i class="fa-solid fa-arrow-rotate-right"></i>
-            <span class="skip-text">15</span>
-        </button>
-        
-        <!-- شريط التقدم -->
-        <div class="progress-container">
-            <input type="range" id="progress" class="progress-bar" value="0" max="100" oninput="seekAudio()">
-        </div>
-    </div>
-
-    <!-- عنصر الصوت المخفي -->
-    <audio id="audio-player" src="audio/582.mp3"></audio>
-
-    <script>
-        const pagesData = [
-            { page: "582", audio: "582" },
-            { page: "583", audio: "583" },
-            { page: "584", audio: "584" },
-            { page: "585", audio: "585" },
-            { page: "586", audio: "586" }
-        ];
-
-        let currentIndex = 0;
-        const audioPlayer = document.getElementById('audio-player');
-        const quranPage = document.getElementById('quran-page');
-        const playIcon = document.getElementById('play-icon');
-        const progressBar = document.getElementById('progress');
-        const sidebar = document.getElementById('sidebar');
-
-        function updateContent() {
-            const current = pagesData[currentIndex];
-            quranPage.src = `images/${current.page}.png`;
-            audioPlayer.src = `audio/${current.audio}.mp3`;
-            
-            playIcon.className = "fa-solid fa-circle-play";
-            progressBar.value = 0;
-        }
-
-        function nextPage() {
-            if (currentIndex < pagesData.length - 1) {
-                currentIndex++;
-                updateContent();
-                audioPlayer.play();
-                playIcon.className = "fa-solid fa-circle-pause";
-            }
-        }
-
-        function prevPage() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                updateContent();
-                audioPlayer.play();
-                playIcon.className = "fa-solid fa-circle-pause";
-            }
-        }
-
-        function togglePlay() {
-            if (audioPlayer.paused) {
-                audioPlayer.play();
-                playIcon.className = "fa-solid fa-circle-pause";
-            } else {
-                audioPlayer.pause();
-                playIcon.className = "fa-solid fa-circle-play";
-            }
-        }
-
-        function skip(seconds) {
-            audioPlayer.currentTime += seconds;
-        }
-
-        audioPlayer.ontimeupdate = function() {
-            if (audioPlayer.duration) {
-                const percentage = (audioPlayer.currentTime / audioPlayer.duration) * 100;
-                progressBar.value = percentage;
-            }
-        };
-
-        function seekAudio() {
-            const seekTo = (progressBar.value / 100) * audioPlayer.duration;
-            audioPlayer.currentTime = seekTo;
-        }
-
-        function toggleSidebar() {
-            sidebar.classList.toggle('open');
-        }
-
-        function jumpToPage(index) {
-            currentIndex = index;
-            updateContent();
-            toggleSidebar();
-            audioPlayer.play();
-            playIcon.className = "fa-solid fa-circle-pause";
-        }
-    </script>
 </body>
 </html>
