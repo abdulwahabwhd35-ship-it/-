@@ -189,14 +189,13 @@
 
     <script>
         // هنا تم تغيير صيغة ملفات الصوت تلقائياً لتطابق امتداد .m4a المرفوع في مستودعك
-        const quranData = [
-            { id: 582, img: "582.png", audio: "582.m4a", label: "النبأ ١" },
-            { id: 583, img: "583.png", audio: "583.m4a", label: "النبأ ٢" },
-            { id: 584, img: "584.png", audio: "584.m4a", label: "النازعات ٢" },
-            { id: 585, img: "585.png", audio: "585.m4a", label: "عـبـس" },
-            { id: 586, img: "586.png", audio: "586.m4a", label: "التكوير" }
-        ];
-
+      const quranData = [
+    { id: 582, img: "582.png", audio: "https://raw.githubusercontent.com/abdulwahabhwd35/ship-it/refs/heads/main/582.m4a", label: "النبأ ١" },
+    { id: 583, img: "583.png", audio: "https://raw.githubusercontent.com/abdulwahabhwd35/ship-it/refs/heads/main/583.m4a", label: "النبأ ٢" },
+    { id: 584, img: "584.png", audio: "https://raw.githubusercontent.com/abdulwahabhwd35/ship-it/refs/heads/main/584.m4a", label: "النازعات ٢" },
+    { id: 585, img: "585.png", audio: "https://raw.githubusercontent.com/abdulwahabhwd35/ship-it/refs/heads/main/585.m4a", label: "عبس" },
+    { id: 586, img: "586.png", audio: "https://raw.githubusercontent.com/abdulwahabhwd35/ship-it/refs/heads/main/586.m4a", label: "التكوير" }
+]; 
         const container = document.getElementById('page-container');
 
         quranData.forEach((page, index) => {
